@@ -11,7 +11,8 @@ class CreditCard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_month_amount(self):
-        pass
+        services = Service.objects.filter(credit_card=self)
+        return sum(service.value for service in services)
 
 class Service(models.Model):
     name = models.CharField(unique=True, max_length=50)
