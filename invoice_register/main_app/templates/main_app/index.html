@@ -1,17 +1,13 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Home</title>
     </head>
     <body>
-        <p>Register:</p>
-        <form>
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username"></input><br>
-            <label for="em">E-mail:</label><br>
-            <input type="text" id="em" name="em"></input><br>
-            <label for="pass">Password:</label><br>
-            <input type="text" id="pass" name="pass"></input><br><br>
-            <input type="submit" value="Submit"></input>
-        </form>
+        <a href="">Login</a>
+        <a href="{% url 'main_app:register' %}">Register</a>
+        {% if username %}
+            <h1>Welcome {{username}}</h1>
+        {% endif %}
     </body>
 </html>
