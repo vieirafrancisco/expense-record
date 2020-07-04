@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
 # Create your views here.
@@ -18,7 +18,7 @@ def dashboard(request, user_id):
         return Http404("User not logged in!")
     return render(request, 'main_app/dashboard.html', {'user': user})
 
-def login(request):
+def login_view(request):
     error_message = ''
     if request.POST:
         args = request.POST
@@ -26,7 +26,7 @@ def login(request):
         if user is not None:
             if user.is_active:
                 request.session.set_expiry(86400)
-                auth_login(request, user)
+                login(request, user)
             return HttpResponseRedirect(reverse('main_app:dashboard', args=(user.id,)))
         error_message = "User doesn't exist!"
     if request.user.is_authenticated:
