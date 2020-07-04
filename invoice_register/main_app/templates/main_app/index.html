@@ -4,10 +4,7 @@
         <title>Home</title>
     </head>
     <body>
-        <a href="">Login</a>
+        <a href="{% url 'main_app:login' %}">Login</a>
         <a href="{% url 'main_app:register' %}">Register</a>
-        {% if username %}
-            <h1>Welcome {{username}}</h1>
-        {% endif %}
     </body>
 </html>
