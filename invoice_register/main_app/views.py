@@ -13,9 +13,9 @@ def index(request):
 
 @login_required
 def dashboard(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    if not user.is_authenticated:
-        return Http404("User not logged in!")
+    user = request.user
+    if not user.is_authenticated or user_id != user.id:
+        raise Http404("User not logged in!")
     return render(request, 'main_app/dashboard.html', {'user': user})
 
 def login_view(request):
@@ -25,7 +25,6 @@ def login_view(request):
         user = authenticate(request, username=args['username'], password=args['password'])
         if user is not None:
             if user.is_active:
-                request.session.set_expiry(86400)
                 login(request, user)
             return HttpResponseRedirect(reverse('main_app:dashboard', args=(user.id,)))
         error_message = "User doesn't exist!"
@@ -41,12 +40,18 @@ def register(request):
     error_message = ''
     if request.POST:
         try:
-            args = {key:value for key, value in request.POST.items() if 'csrf' not in key}
-            user = User(**args)
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            user = User(username=username, email=email)
+            user.set_password(password)
+            user.save()
+            # TODO need to make login before creating the user
+            # redirect to login_view?
+            login(request, user)
         except Exception as e:
             error_message = e
         else:
-            user.save()
             return HttpResponseRedirect(reverse('main_app:dashboard', args=(user.id,)))
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('main_app:dashboard', args=(request.user.id,)))
