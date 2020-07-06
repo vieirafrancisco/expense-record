@@ -1,0 +1,13 @@
+{% extends 'users/base.html' %}
+
+{% block body %}
+<p>Login</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type='submit' value="Login">
+</form>
+
+<a href="{% url 'users:dashboard' %}">Go back to dashboard</a>
+<a href="{% url 'password_change' %}">Change password</a>
+{% endblock %}
