@@ -15,5 +15,5 @@ Também será notificado ao usuário toda vez que a data de pagamento de um serv
 .
 ├── doc     # Documentação e diagramas
 ├── api     # Aplicação em flask
-└── front   # Aplicação em react native
+└── app     # Aplicação em react native
 ````
