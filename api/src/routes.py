@@ -62,6 +62,12 @@ def get_user_by_code(email):
     """
     pass
 
+@app.route('/users')
+def get_all_users():
+    users = User.get_all()
+    names = [str(user.name) for user in users]
+    return ", ".join(names)
+
 
 # create/remove/update credit_card
 # create/remove/update service
