@@ -10,7 +10,9 @@ class TestUserCrud(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_create_user_return_status_code_200_ok(self):
+    @patch('src.routes.User')
+    def test_create_user_return_status_code_200_ok(self, user_mock):
+        user_mock.save.return_value = None
         body = {
             "name": "name_test",
             "email": "name_test@mail.com",
@@ -27,7 +29,9 @@ class TestUserCrud(unittest.TestCase):
         response = self.app.post('/create/user', json=body)
         assert response.status_code == 400
 
-    def test_create_user_return_status_code_200_ok_with_body_with_more_attributes_than_needed(self):
+    @patch('src.routes.User')
+    def test_create_user_return_status_code_200_ok_with_body_with_more_attributes_than_needed(self, user_mock):
+        user_mock.save.return_value = None
         body = {
             "name": "name_test",
             "email": "name_test@mail.com",
