@@ -63,11 +63,6 @@ class SqliteDB:
 db = SqliteDB()
 
 if __name__ == '__main__':
-    db.create_table('users', [
-        'id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT',
-        'name TEXT NOT NULL',
-        'email TEXT UNIQUE NOT NULL',
-        'income FLOAT NOT NULL'
-    ])
-    db.insert_into_table('users', ['name', 'email', 'income'], ['asda', 'asdafs', 2.5])
-    print(db.select_all_from('users'))
+    ## Create tables
+    #create_tables(db)
+    ...
