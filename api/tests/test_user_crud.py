@@ -51,3 +51,20 @@ class TestUserCrud(unittest.TestCase):
         }
         response = self.app.post('/create/user', json=body)
         assert response.status_code == 409
+
+    def test_get_user_by_email_return_200_ok(self):
+        email = "test@mail.com"
+        response = self.app.get(f'/user/{email}')
+        assert response.status_code == 200
+
+    def test_get_user_by_email_return_user_dictionary(self):
+        email = "test@mail.com"
+        response = self.app.get(f'/user/{email}')
+        result_keys = ["name", "email", "income"]
+        keys = response.json.keys()
+        assert all(map(lambda x: x in keys, result_keys))
+
+    def test_get_user_by_email_when_email_not_exist(self):
+        email = "fsdifkjlsdahflk"
+        response = self.app.get(f'/user/{email}')
+        assert response.status_code == 400
