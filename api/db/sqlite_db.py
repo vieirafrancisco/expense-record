@@ -53,11 +53,21 @@ class SqliteDB:
         self.execute_commit(sql)
 
     def select_all_from(self, table_name, attr_names):
-        keys = ", ".join(attr_names)
+        attrs = ", ".join(attr_names)
         self.connect()
         cur = self.conn.cursor()
-        cur.execute(f"SELECT {keys} FROM {table_name}")
+        cur.execute(f"SELECT {attrs} FROM {table_name}")
         data = cur.fetchall()
+        return data
+
+    def select_one_from(self, table_name, attr_names, where):
+        attrs = ", ".join(attr_names)
+        key, value = tuple(where.items())[0]
+        value = f"'{value}'"
+        self.connect()
+        cur = self.conn.cursor()
+        cur.execute(f"SELECT {attrs} FROM {table_name} WHERE {key} == {value}")
+        data = cur.fetchone()
         return data
 
 db = SqliteDB()
