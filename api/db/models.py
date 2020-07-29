@@ -41,12 +41,26 @@ class User(Model):
     @classmethod
     def get_all(cls):
         users_tuples = db.select_all_from('users', ["name", "email", "income"])
-        for user_tuple in users_tuples:
-            yield User(*user_tuple)
+        for name, email, income in users_tuples:
+            user = {
+                "name": name,
+                "email": email,
+                "income": income
+            }
+            yield user
 
     @classmethod
-    def get_one(cls):
-        ...
+    def get_one(cls, email):
+        data = db.select_one_from('users', ["name", "email", "income"], {"email": email})
+        if data is None:
+            raise Exception(f"User with the email address '{email} doesn't exist!'")
+        name, email, income = data
+        user = {
+            "name": name,
+            "email": email,
+            "income": income
+        }
+        return user
 
     @classmethod
     def filter_by_email(cls):
