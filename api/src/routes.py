@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, request, session, url_for
+from flask import Flask, request, session, url_for, jsonify
 
 from db.models import User
 
@@ -54,19 +54,27 @@ def get_credit_card_by_name(name):
     """
     pass
 
-# get user by pid
-@app.route('/user/<int:pid>')
-def get_user_by_code(email):
+# get user by email
+@app.route('/user/<string:email>')
+def get_user_by_email(email):
     """
-    Get a specific user by a given pid (associated to user email adress)
+    Get a specific user by a given email
     """
-    pass
+    try:
+        user = User.get_one(email)
+    except Exception as e:
+        return flask.Response(e.args[0], status=400)
+    response = jsonify(
+        name=user["name"],
+        email=user["email"],
+        income=user["income"]
+    )
+    return response
 
 @app.route('/users')
 def get_all_users():
-    users = User.get_all()
-    names = [str(user.name) for user in users]
-    return ", ".join(names)
+    users = list(User.get_all())
+    return jsonify(users)
 
 
 # create/remove/update credit_card
