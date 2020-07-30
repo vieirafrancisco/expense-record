@@ -1,5 +1,7 @@
 import sqlite3
 
+from settings import DB_FILE_PATH
+
 class SqliteDB:
     _instance = None
 
@@ -9,13 +11,12 @@ class SqliteDB:
         return cls._instance
 
     def __init__(self):
-        self.db_path = 'rsc/db/database.db'
         self.conn = None
         self.is_connected = False
 
     def connect(self):
         try:
-            self.conn = sqlite3.connect(self.db_path)
+            self.conn = sqlite3.connect(DB_FILE_PATH)
             self.is_connected = True
         except Exception as e:
             raise e
@@ -71,8 +72,3 @@ class SqliteDB:
         return data
 
 db = SqliteDB()
-
-if __name__ == '__main__':
-    ## Create tables
-    #create_tables(db)
-    ...
