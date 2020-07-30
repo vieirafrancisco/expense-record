@@ -52,13 +52,25 @@ class TestUserCrud(unittest.TestCase):
         response = self.app.post('/create/user', json=body)
         assert response.status_code == 409
 
-    def test_get_user_by_email_return_200_ok(self):
+    @patch('src.routes.User')
+    def test_get_user_by_email_return_200_ok(self, user_mock):
         email = "test@mail.com"
+        user_mock.get_one.return_value = {
+            "name": "test_name",
+            "email": "test_email",
+            "income": 2.5
+        }
         response = self.app.get(f'/user/{email}')
         assert response.status_code == 200
 
-    def test_get_user_by_email_return_user_dictionary(self):
+    @patch('src.routes.User')
+    def test_get_user_by_email_return_user_dictionary(self, user_mock):
         email = "test@mail.com"
+        user_mock.get_one.return_value = {
+            "name": "test_name",
+            "email": "test_email",
+            "income": 2.5
+        }
         response = self.app.get(f'/user/{email}')
         result_keys = ["name", "email", "income"]
         keys = response.json.keys()
