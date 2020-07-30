@@ -2,6 +2,6 @@ language: python
 python:
     - "3.8"
 install:
-    - cd ./api && pip install -r requirements.txt
+    - cd api && pip install -r requirements.txt
 script:
-    - cd ./api && make test
+    - make test
