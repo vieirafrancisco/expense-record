@@ -1,7 +1,7 @@
 import os
 
 # dev
-DEBUG = True
+DEBUG = False
 
 # database
 DB_NAME = "database.db"
