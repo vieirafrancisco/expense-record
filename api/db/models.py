@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from exceptions.db_exceptions import ModelInstanceAlreadyExist
-from db.sqlite_db import db
+from db.database import db
 
 class Model(ABC):
     def __init__(self, table_name):
