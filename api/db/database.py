@@ -3,7 +3,7 @@ import sqlite3
 
 import psycopg2
 
-from settings import DEBUG
+from settings import HEROKU_DB
 
 class Database(ABC):
     _instance = None
@@ -117,7 +117,7 @@ class PostgresDB(Database):
         self.execute_commit(sql)
 
 
-if DEBUG:
+if not HEROKU_DB:
     from settings import DB_FILE_PATH
     db = SqliteDB(DB_FILE_PATH)
 else:
