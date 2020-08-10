@@ -1,0 +1,27 @@
+{
+    "users": [
+        "name TEXT NOT NULL",
+        "email TEXT UNIQUE NOT NULL",
+        "income FLOAT NOT NULL"
+    ],
+
+    "credit_cards": [
+        "name TEXT NOT NULL",
+        "user_id INTEGER",
+        "FOREIGN KEY (user_id) REFERENCES users(id)"
+    ],
+
+    "services": [
+        "name TEXT NOT NULL",
+        "value FLOAT NOT NULL",
+        "credit_card_id INTEGER",
+        "FOREIGN KEY (credit_card_id) REFERENCES credit_cards(id)"
+    ],
+
+    "invoices": [
+        "date DATE UNIQUE NOT NULL",
+        "value FLOAT NOT NULL",
+        "credit_card_id INTEGER",
+        "FOREIGN KEY (credit_card_id) REFERENCES credit_cards(id)"
+    ]
+}
