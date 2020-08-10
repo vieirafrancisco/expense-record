@@ -1,8 +1,8 @@
 import os
 import json
 
-from db.sqlite_db import db
-from settings import DB_NAME, DB_PATH, TABLES_JSON_PATH
+from db.database import db
+from settings import DB_NAME, DB_PATH, TABLES_JSON_PATH, DEBUG
 
 def create_tables(db):
     with open(TABLES_JSON_PATH, 'r') as f:
@@ -11,6 +11,9 @@ def create_tables(db):
         db.create_table(table_name, values)
 
 def setup_run():
-    if DB_NAME not in os.listdir(DB_PATH):
+    if not DEBUG:
         create_tables(db)
-        print("Success on create the database!")
+    else:
+        if DB_NAME not in os.listdir(DB_PATH):
+            create_tables(db)
+            print("Success on create the database!")
