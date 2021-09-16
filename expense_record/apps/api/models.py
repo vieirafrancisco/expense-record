@@ -26,11 +26,7 @@ class Bill(models.Model):
     date = models.DateTimeField(verbose_name="Data")
     value = models.DecimalField(verbose_name="Valor", decimal_places=2, max_digits=19)
     is_service = models.BooleanField(default=False, verbose_name="É um serviço?")
-    end_service_date = models.DateTimeField(null=True, blank=True, verbose_name="Data de finalização do Serviço")
     is_installment = models.BooleanField(default=False, verbose_name="É parcelado?")
-    installment_count = models.SmallIntegerField(default=0, verbose_name="Número de parcelas")
-    has_promotion = models.BooleanField(default=False, verbose_name="Tem promoção?")
-    promotion_count = models.SmallIntegerField(default=0, verbose_name="Número de mêses com a promoção")
 
     class Meta:
         verbose_name = "Conta"
@@ -41,14 +37,56 @@ class Bill(models.Model):
                 name="Service and Installmente can't both be True."
             ),
         ]
+        unique_together = (("credit_card", "name", "date"),)
 
     def __str__(self):
         return f"Conta ({self.name}) do {self.credit_card}"
+
+    def create(self, data):
+        pass
+    
+
+class Service(models.Model):
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, verbose_name="Conta")
+    is_active = models.BooleanField(default=True, verbose_name="Está ativo?")
+    end_date = models.DateField(null=True, blank=True, verbose_name="Data de finalização do serviço")
+    has_promotion = models.BooleanField(default=False, verbose_name="Tem promoção?")
+    promotion_count = models.SmallIntegerField(default=0, verbose_name="Número de meses com a promoção")
+    # TODO: valor após a promoção
+
+    class Meta:
+        verbose_name = "Serviço"
+        verbose_name_plural = "Serviços"
+
+    def __str__(self):
+        return f"Serviço da {self.bill}"
     
     @property
     def promotion_due_date(self):
+        # TODO: fix this method
+        bill_date = self.bill.date
         if self.has_promotion:
-            day = self.date.day
-            month = (self.date.month + self.promotion_count) % 12
-            year = self.date.year + (self.date.month + self.promotion_count) // 12
+            day = bill_date.day
+            month = (bill_date.month + self.promotion_count) % 12  # WARNING: wrong
+            year = bill_date.year + (bill_date.month + self.promotion_count) // 12
             return date(day=day, month=month, year=year)
+
+
+class Installment(models.Model):
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, verbose_name="Conta")
+    count = models.SmallIntegerField(verbose_name="Número de parcelas")
+
+    class Meta:
+        verbose_name = "Parcelamento"
+        verbose_name_plural = "Parcelamentos"
+
+    def __str__(self):
+        return f"Parcelamento da {self.bill}"
+    
+    @property
+    def total_value(self):
+        return self.bill.value * self.count
+    
+    @property
+    def end_date(self):
+        pass
