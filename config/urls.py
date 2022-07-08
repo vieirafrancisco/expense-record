@@ -19,7 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 
+from apps.main.views import ProfileViewSet
+
 router = routers.DefaultRouter()
+router.register(r"profiles", ProfileViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
