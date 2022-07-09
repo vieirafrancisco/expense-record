@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -86,12 +87,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASES = {"default": env.dj_db_url("DATABASE_URL", "sqlite:///db.sqlite3")}
 
 
 # Password validation
@@ -130,6 +126,10 @@ USE_TZ = True
 
 STATIC_ROOT = env.str("STATIC_ROOT", os.path.join(BASE_DIR, "staticfiles"))
 STATIC_URL = "static/"
+STATICFILES_STORAGE = env.str(
+    "STATICFILES_STORAGE",
+    "whitenoise.storage.CompressedManifestStaticFilesStorage",
+)
 
 MEDIA_ROOT = env.str("MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
 MEDIA_URL = env.str("MEDIA_URL", "/media/")

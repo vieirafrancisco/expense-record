@@ -4,6 +4,7 @@ __pycache__/
 dev_settings.py
 venv/
 *.db
+*.sqlite
 *.sqlite3
 .env
 staticfiles/
